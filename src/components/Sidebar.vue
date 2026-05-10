@@ -2,7 +2,8 @@
 import { LayoutDashboard, CheckCircle, Headphones, BookOpen, MessageCircle, BarChart, Calendar, Settings } from 'lucide-vue-next';
 
 defineProps({
-  activeNav: String
+  activeNav: String,
+  sidebarOpen: Boolean
 });
 
 const emit = defineEmits(['setActiveNav']);
@@ -20,7 +21,12 @@ const navItems = [
 </script>
 
 <template>
-  <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
+  <aside 
+    :class="[
+      'w-64 bg-white border-r border-gray-200 flex flex-col fixed lg:static inset-y-0 left-0 z-50 transform transition-transform duration-200',
+      sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+    ]"
+  >
     <div class="h-16 flex items-center px-4 border-b border-gray-200">
       <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mr-3">
         <span class="text-white font-bold text-sm">英</span>

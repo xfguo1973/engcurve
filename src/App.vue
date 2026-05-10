@@ -5,20 +5,35 @@ import Header from './components/Header.vue'
 import OverviewCards from './components/OverviewCards.vue'
 import ModuleProgress from './components/ModuleProgress.vue'
 import ListeningPage from './components/ListeningPage.vue'
+import { Menu, X } from 'lucide-vue-next'
 
 const activeNav = ref('overview')
+const sidebarOpen = ref(false)
 
 const setActiveNav = (nav) => {
   activeNav.value = nav
+  sidebarOpen.value = false
+}
+
+const toggleSidebar = () => {
+  sidebarOpen.value = !sidebarOpen.value
 }
 </script>
 
 <template>
   <div class="flex h-screen bg-gray-50">
-    <Sidebar :activeNav="activeNav" @setActiveNav="setActiveNav" />
+    <Sidebar :activeNav="activeNav" @setActiveNav="setActiveNav" :sidebarOpen="sidebarOpen" />
+    
+    <!-- Mobile overlay -->
+    <div 
+      v-if="sidebarOpen" 
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden"
+      @click="sidebarOpen = false"
+    ></div>
+    
     <div class="flex-1 flex flex-col overflow-hidden">
-      <Header />
-      <main class="flex-1 overflow-y-auto p-6">
+      <Header @toggleSidebar="toggleSidebar" />
+      <main class="flex-1 overflow-y-auto p-4 lg:p-6">
         <div class="max-w-7xl mx-auto">
           <template v-if="activeNav === 'overview'">
             <OverviewCards />
