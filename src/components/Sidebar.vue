@@ -1,12 +1,15 @@
 <script setup>
-import { LayoutDashboard, CheckCircle, Headphones, BookOpen, MessageCircle, BarChart, Calendar, Settings } from 'lucide-vue-next';
+import { useRouter, useRoute } from 'vue-router'
+import { LayoutDashboard, CheckCircle, Headphones, BookOpen, MessageCircle, BarChart, Calendar, Settings } from 'lucide-vue-next'
 
 defineProps({
-  activeNav: String,
   sidebarOpen: Boolean
-});
+})
 
-const emit = defineEmits(['setActiveNav']);
+const emit = defineEmits(['close'])
+
+const router = useRouter()
+const route = useRoute()
 
 const navItems = [
   { id: 'overview', label: '总览', icon: LayoutDashboard },
@@ -17,7 +20,12 @@ const navItems = [
   { id: 'statistics', label: '学习统计', icon: BarChart },
   { id: 'calendar', label: '打卡日历', icon: Calendar },
   { id: 'settings', label: '设置', icon: Settings }
-];
+]
+
+const handleNavClick = (id) => {
+  router.push(`/${id === 'overview' ? '' : id}`)
+  emit('close')
+}
 </script>
 
 <template>
@@ -28,7 +36,7 @@ const navItems = [
     ]"
   >
     <div class="h-16 flex items-center px-4 border-b border-gray-200">
-      <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mr-3">
+      <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
         <span class="text-white font-bold text-sm">英</span>
       </div>
       <span class="text-lg font-semibold text-gray-800">英语打卡</span>
@@ -39,11 +47,11 @@ const navItems = [
         <button
           v-for="item in navItems"
           :key="item.id"
-          @click="emit('setActiveNav', item.id)"
+          @click="handleNavClick(item.id)"
           :class="[
-            'w-full flex items-center px-3 py-2.5 rounded-lg text-left transition-all duration-200 cursor-pointer',
-            activeNav === item.id
-              ? 'bg-blue-50 text-primary font-medium'
+            'w-full flex items-center px-3 py-2.5 rounded-lg text-left transition-all duration-200',
+            route.name === item.id
+              ? 'bg-blue-50 text-blue-600 font-medium'
               : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
           ]"
         >
