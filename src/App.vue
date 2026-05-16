@@ -1,0 +1,55 @@
+<script setup>
+import { ref, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import Sidebar from './components/Sidebar.vue'
+import Header from './components/Header.vue'
+
+const router = useRouter()
+const route = useRoute()
+
+const sidebarOpen = ref(false)
+
+const isLoggedIn = computed(function() {
+  return localStorage.getItem('currentUser') !== null
+})
+
+const showLayout = computed(function() {
+  return isLoggedIn.value && !['/login', '/register'].includes(route.path)
+})
+
+function toggleSidebar() {
+  sidebarOpen.value = !sidebarOpen.value
+}
+
+function closeSidebar() {
+  sidebarOpen.value = false
+}
+
+function handleNavClick(id) {
+  router.push('/' + (id === 'overview' ? '' : id))
+  closeSidebar()
+}
+</script>
+
+<template>
+  <div class="min-h-screen bg-gray-50">
+    <template v-if="showLayout">
+      <Sidebar 
+        :is-open="sidebarOpen" 
+        :current-route="route.name"
+        @toggle="toggleSidebar"
+        @close="closeSidebar"
+        @nav-click="handleNavClick"
+      />
+      <div class="lg:ml-64">
+        <Header @toggle-sidebar="toggleSidebar" />
+        <main class="p-6">
+          <router-view />
+        </main>
+      </div>
+    </template>
+    <template v-else>
+      <router-view />
+    </template>
+  </div>
+</template>
