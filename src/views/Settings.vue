@@ -14,7 +14,7 @@ const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
 function logout() {
   if (confirm('确定要退出登录吗？')) {
     localStorage.removeItem('currentUser')
-    window.location.href = '/login'
+    window.location.href = '/engcurve/'
   }
 }
 
