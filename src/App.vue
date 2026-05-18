@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Sidebar from './components/Sidebar.vue'
 import Header from './components/Header.vue'
@@ -8,10 +8,14 @@ const router = useRouter()
 const route = useRoute()
 
 const sidebarOpen = ref(false)
+const isLoggedIn = ref(localStorage.getItem('currentUser') !== null)
 
-const isLoggedIn = computed(function() {
-  return localStorage.getItem('currentUser') !== null
-})
+watch(
+  () => route.path,
+  () => {
+    isLoggedIn.value = localStorage.getItem('currentUser') !== null
+  }
+)
 
 const showLayout = computed(function() {
   return isLoggedIn.value && !['/', '/register'].includes(route.path)
