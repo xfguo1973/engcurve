@@ -8,17 +8,9 @@ const router = useRouter()
 const route = useRoute()
 
 const sidebarOpen = ref(false)
-const isLoggedIn = ref(localStorage.getItem('currentUser') !== null)
-
-watch(
-  () => route.path,
-  () => {
-    isLoggedIn.value = localStorage.getItem('currentUser') !== null
-  }
-)
 
 const showLayout = computed(function() {
-  return isLoggedIn.value && !['/', '/register'].includes(route.path)
+  return localStorage.getItem('currentUser') !== null && !['/', '/register'].includes(route.path)
 })
 
 function toggleSidebar() {
