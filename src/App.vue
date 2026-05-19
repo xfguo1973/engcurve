@@ -9,8 +9,10 @@ const route = useRoute()
 
 const sidebarOpen = ref(false)
 
+const authRoutes = ['/', '/register']
+
 const showLayout = computed(function() {
-  return localStorage.getItem('currentUser') !== null && !['/', '/register'].includes(route.path)
+  return !authRoutes.includes(route.path)
 })
 
 function toggleSidebar() {
